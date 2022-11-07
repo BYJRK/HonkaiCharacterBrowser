@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="Button.Normal.Background" Color="#0097de" />
+    <SolidColorBrush x:Key="Button.Normal.Foreground" Color="#fff" />
+
+    <SolidColorBrush x:Key="Button.CloseVideo.Foreground" Color="#00c3ff" />
+    <SolidColorBrush x:Key="Button.CloseVideo.Foreground.MouseOver" Color="#3ed1f8" />
+
+    <SolidColorBrush x:Key="Border.Header.Background" Color="#3ed1f8" />
+
+    <SolidColorBrush x:Key="Border.ValkyrieIcon.Normal" Color="White" />
+    <SolidColorBrush x:Key="Border.ValkyrieIcon.MouseOver" Color="#fedf4c" />
+
+    <LinearGradientBrush x:Key="Border.GroupHeader.Line" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0FFF" />
+        <GradientStop Offset="0.5" Color="#9FFF" />
+        <GradientStop Offset="1" Color="#0FFF" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Border.SidePanel.SkillInfoSeparator" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#62eaf5" />
+        <GradientStop Offset="0.03" Color="#62eaf5" />
+        <GradientStop Offset="0.03" Color="#0fff" />
+        <GradientStop Offset="0.04" Color="#0fff" />
+        <GradientStop Offset="0.04" Color="#4462eaf5" />
+        <GradientStop Offset="0.96" Color="#4462eaf5" />
+        <GradientStop Offset="0.96" Color="#0fff" />
+        <GradientStop Offset="0.97" Color="#0fff" />
+        <GradientStop Offset="0.97" Color="#62eaf5" />
+        <GradientStop Offset="1" Color="#62eaf5" />
+    </LinearGradientBrush>
+
+</ResourceDictionary>

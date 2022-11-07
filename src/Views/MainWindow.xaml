@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HonkaiCharacterBrowser"
+        xmlns:local="clr-namespace:HonkaiCharacterBrowser.Views"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:HonkaiCharacterBrowser.ViewModels"
         xmlns:vc="clr-namespace:HonkaiCharacterBrowser.Converters"
@@ -27,51 +27,6 @@
                 </x:Array>
             </d:CollectionViewSource.DesignSource>
         </CollectionViewSource>
-        <ControlTemplate x:Key="valkyrieGroup" TargetType="GroupItem">
-            <GroupBox>
-                <GroupBox.Style>
-                    <Style TargetType="GroupBox">
-                        <Setter Property="Header" Value="{Binding Name}" />
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="GroupBox">
-                                    <StackPanel>
-                                        <DockPanel>
-                                            <TextBlock DockPanel.Dock="Left"
-                                                       Foreground="{TemplateBinding Foreground}"
-                                                       FontSize="28"
-                                                       Style="{StaticResource skewText}"
-                                                       FontWeight="Bold"
-                                                       Text="{TemplateBinding Header}" />
-                                            <TextBlock Margin="0,0,5,0"
-                                                       DockPanel.Dock="Right"
-                                                       Opacity="0.5"
-                                                       FontSize="24"
-                                                       FontFamily="Impact"
-                                                       Style="{StaticResource skewText}"
-                                                       Foreground="{TemplateBinding Foreground}"
-                                                       Text="{Binding Items[0].EnglishName}" />
-                                            <Border Height="3" Margin="20,0" BorderThickness="2">
-                                                <Border.BorderBrush>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                        <GradientStop Color="#0FFF" />
-                                                        <GradientStop Offset="0.5" Color="#9FFF" />
-                                                        <GradientStop Offset="1" Color="#0FFF" />
-                                                    </LinearGradientBrush>
-                                                </Border.BorderBrush>
-                                            </Border>
-                                        </DockPanel>
-                                        <ContentPresenter />
-                                    </StackPanel>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </GroupBox.Style>
-                <ItemsPresenter />
-            </GroupBox>
-        </ControlTemplate>
     </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -108,169 +63,11 @@
         <Image Grid.ColumnSpan="2" Source="https://www.bh3.com/_nuxt/img/rolebg.6391bd9.jpg" Stretch="UniformToFill" />
 
         <!-- 右侧信息栏 -->
-        <Border Grid.Column="1"
-                Width="400"
-                Margin="10"
-                d:Visibility="Visible"
-                TextElement.Foreground="White"
-                CornerRadius="10"
-                BorderThickness="1"
-                BorderBrush="#3FFF"
-                Visibility="{Binding IsSidePanelVisible, Converter={vc:BoolToVisibilityConverter}}"
-                Background="Transparent">
-            <Border.Resources>
-            </Border.Resources>
-            <Border Margin="8"
-                    Padding="10"
-                    Background="#554290cd"
-                    CornerRadius="8">
-                <Grid>
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                        <StackPanel>
-                            <Image Width="300"
-                                   Margin="0,-10,0,0"
-                                   d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517180016482.png"
-                                   Source="{Binding SelectedValkyrie.ProtraitUrl}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseUp">
-                                        <i:InvokeCommandAction Command="{Binding ShowProtraitCommand}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Image>
-                            <TextBlock Margin="0,10"
-                                       HorizontalAlignment="Center"
-                                       d:Text="琪亚娜·卡斯兰娜"
-                                       Visibility="Collapsed"
-                                       Text="{Binding SelectedValkyrie.Name}"
-                                       FontSize="32"
-                                       FontWeight="Bold"
-                                       FontStyle="Italic" />
-                            <TextBlock Margin="0,10"
-                                       HorizontalAlignment="Center"
-                                       d:Text="空之律者"
-                                       Style="{StaticResource skewText}"
-                                       FontSize="32"
-                                       FontWeight="Bold"
-                                       Text="{Binding SelectedValkyrie.Armor}" />
-                            <Grid Style="{StaticResource headerBorder}">
-                                <Border />
-                                <TextBlock Text="背景资料" />
-                            </Grid>
-                            <!-- 角色信息 -->
-                            <TextBlock Margin="12,12,12,0" LineHeight="36" FontSize="18">
-                                <Run d:Text="姓名：琪亚娜·卡斯兰娜" Text="{Binding SelectedValkyrie.Name, StringFormat=姓名：{0}}" />
-                                <LineBreak />
-                                <Run d:Text="生日：12月7日" Text="{Binding SelectedValkyrie.Birthday}" />
-                                <LineBreak />
-                                <Run d:Text="装甲：空之律者" Text="{Binding SelectedValkyrie.Armor, StringFormat=装甲：{0}}" />
-                                <LineBreak />
-                                <Run d:Text="作战方式：亚空之矛" Text="{Binding SelectedValkyrie.BattleStyle, StringFormat=作战方式：{0}}" />
-                            </TextBlock>
-                            <Grid Style="{StaticResource headerBorder}">
-                                <Border />
-                                <TextBlock Text="角色招式" />
-                            </Grid>
-                            <!-- 技能列表 -->
-                            <ListBox Name="skills"
-                                     Margin="0,10"
-                                     Padding="5"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     ItemsSource="{Binding SelectedValkyrie.Skills}">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Rows="1" />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Image Width="50"
-                                               HorizontalAlignment="Center"
-                                               Cursor="Hand"
-                                               Source="{Binding IconUrl}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ListBoxItem">
-                                                    <ContentPresenter />
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <d:ListBox.Items>
-                                    <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517183554239.png" />
-                                    <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517262762322.png" />
-                                    <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517283299509.png" />
-                                    <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517295718285.png" />
-                                </d:ListBox.Items>
-                            </ListBox>
-                            <DockPanel DataContext="{Binding ElementName=skills, Path=SelectedItem}">
-                                <StackPanel Width="140" DockPanel.Dock="Left">
-                                    <TextBlock d:Text="亚空之矛"
-                                               FontSize="28"
-                                               Style="{StaticResource skewText}"
-                                               FontWeight="Bold"
-                                               Text="{Binding Title}" />
-                                    <Border Height="1" Margin="0,8" BorderThickness="1">
-                                        <Border.BorderBrush>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                <GradientStop Color="#62eaf5" />
-                                                <GradientStop Offset="0.03" Color="#62eaf5" />
-                                                <GradientStop Offset="0.03" Color="#0fff" />
-                                                <GradientStop Offset="0.04" Color="#0fff" />
-                                                <GradientStop Offset="0.04" Color="#4462eaf5" />
-                                                <GradientStop Offset="0.96" Color="#4462eaf5" />
-                                                <GradientStop Offset="0.96" Color="#0fff" />
-                                                <GradientStop Offset="0.97" Color="#0fff" />
-                                                <GradientStop Offset="0.97" Color="#62eaf5" />
-                                                <GradientStop Offset="1" Color="#62eaf5" />
-                                            </LinearGradientBrush>
-                                        </Border.BorderBrush>
-                                    </Border>
-                                    <TextBlock d:Text="快速五连击，发动五次牛逼的攻击"
-                                               FontSize="16"
-                                               TextWrapping="Wrap"
-                                               Text="{Binding Description}" />
-                                </StackPanel>
-                                <Grid>
-                                    <Image d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517204885977.png" Stretch="Uniform" Source="{Binding PreviewUrl}" />
-                                    <Button Width="50"
-                                            Height="60"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ShowVideoPanelCommand}"
-                                            Cursor="Hand">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="{TemplateBinding Background}">
-                                                    <ContentPresenter />
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Background>
-                                            <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/video-play.png" />
-                                        </Button.Background>
-                                    </Button>
-                                </Grid>
-                            </DockPanel>
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    <!-- 隐藏右边栏按钮 -->
-                    <Button Grid.Column="1"
-                            Width="80"
-                            Margin="1,20,20,1"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Command="{Binding HideSidePanelCommand}"
-                            Style="{StaticResource commonButton}"
-                            Content="Hide" />
-                </Grid>
-            </Border>
-        </Border>
+        <local:SidePanel Grid.Column="1"
+                         Width="400"
+                         d:Visibility="Visible"
+                         DataContext="{Binding}"
+                         Visibility="{Binding IsSidePanelVisible, Converter={vc:BoolToVisibilityConverter}}" />
 
         <!-- 角色列表 -->
         <ListBox>
@@ -306,13 +103,7 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="GroupItem">
-                            <Setter Property="Template" Value="{StaticResource valkyrieGroup}" />
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource GroupItem.ValkyrieGroup}" />
             </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -320,7 +111,7 @@
                         <Border Name="border"
                                 Width="113"
                                 Height="143"
-                                Background="White"
+                                Background="{StaticResource Border.ValkyrieIcon.Normal}"
                                 CornerRadius="10"
                                 RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform>
@@ -335,7 +126,7 @@
                     </Grid>
                     <DataTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#fedf4c" />
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource Border.ValkyrieIcon.MouseOver}" />
                         </Trigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
@@ -359,7 +150,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Command="{Binding ToggleListBoxViewCommand}"
-                Style="{StaticResource commonButton}"
+                Style="{StaticResource Button.Normal}"
                 Content="Switch" />
 
         <!-- 视频界面 -->
@@ -370,7 +161,7 @@
                         VerticalAlignment="Top"
                         Panel.ZIndex="10"
                         Command="{Binding HideVideoPanelCommand}"
-                        Style="{StaticResource closeVideoButton}" />
+                        Style="{StaticResource Button.CloseVideo}" />
                 <MediaElement Volume="0.75">
                     <MediaElement.Style>
                         <Style TargetType="MediaElement">

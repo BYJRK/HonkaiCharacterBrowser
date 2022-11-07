@@ -1,0 +1,163 @@
+﻿<UserControl x:Class="HonkaiCharacterBrowser.Views.SidePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:HonkaiCharacterBrowser.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:vm="clr-namespace:HonkaiCharacterBrowser.ViewModels"
+             xmlns:vc="clr-namespace:HonkaiCharacterBrowser.Converters"
+             xmlns:model="clr-namespace:HonkaiCharacterBrowser.Models"
+             d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
+             d:DesignHeight="800"
+             d:DesignWidth="400"
+             TextElement.Foreground="White"
+             mc:Ignorable="d">
+
+    <Border CornerRadius="10"
+            BorderThickness="1"
+            BorderBrush="#3FFF"
+            Background="Transparent">
+        <Border.Resources>
+        </Border.Resources>
+        <Border Margin="8"
+                Padding="10"
+                Background="#554290cd"
+                CornerRadius="8">
+            <Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel>
+                        <Image Width="300"
+                               Margin="0,-10,0,0"
+                               d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517180016482.png"
+                               Source="{Binding SelectedValkyrie.ProtraitUrl}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseUp">
+                                    <i:InvokeCommandAction Command="{Binding ShowProtraitCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                        <TextBlock Margin="0,10"
+                                   HorizontalAlignment="Center"
+                                   d:Text="琪亚娜·卡斯兰娜"
+                                   Visibility="Collapsed"
+                                   Text="{Binding SelectedValkyrie.Name}"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   FontStyle="Italic" />
+                        <TextBlock Margin="0,10"
+                                   HorizontalAlignment="Center"
+                                   d:Text="空之律者"
+                                   Style="{StaticResource TextBlock.Skew}"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   Text="{Binding SelectedValkyrie.Armor}" />
+                        <Grid Style="{StaticResource Grid.HeaderBorder}">
+                            <Border />
+                            <TextBlock Text="背景资料" />
+                        </Grid>
+                        <!-- 角色信息 -->
+                        <TextBlock Margin="12,12,12,0" LineHeight="36" FontSize="18">
+                            <Run d:Text="姓名：琪亚娜·卡斯兰娜" Text="{Binding SelectedValkyrie.Name, StringFormat=姓名：{0}}" />
+                            <LineBreak />
+                            <Run d:Text="生日：12月7日" Text="{Binding SelectedValkyrie.Birthday}" />
+                            <LineBreak />
+                            <Run d:Text="装甲：空之律者" Text="{Binding SelectedValkyrie.Armor, StringFormat=装甲：{0}}" />
+                            <LineBreak />
+                            <Run d:Text="作战方式：亚空之矛" Text="{Binding SelectedValkyrie.BattleStyle, StringFormat=作战方式：{0}}" />
+                        </TextBlock>
+                        <Grid Style="{StaticResource Grid.HeaderBorder}">
+                            <Border />
+                            <TextBlock Text="角色招式" />
+                        </Grid>
+                        <!-- 技能列表 -->
+                        <ListBox Name="skills"
+                                 Margin="0,10"
+                                 Padding="5"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ItemsSource="{Binding SelectedValkyrie.Skills}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Width="50"
+                                           HorizontalAlignment="Center"
+                                           Cursor="Hand"
+                                           Source="{Binding IconUrl}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <d:ListBox.Items>
+                                <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517183554239.png" />
+                                <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517262762322.png" />
+                                <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517283299509.png" />
+                                <model:Skill IconUrl="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517295718285.png" />
+                            </d:ListBox.Items>
+                        </ListBox>
+                        <DockPanel DataContext="{Binding ElementName=skills, Path=SelectedItem}">
+                            <StackPanel Width="140" DockPanel.Dock="Left">
+                                <TextBlock d:Text="亚空之矛"
+                                           FontSize="28"
+                                           Style="{StaticResource TextBlock.Skew}"
+                                           FontWeight="Bold"
+                                           Text="{Binding Title}" />
+                                <Border Height="1"
+                                        Margin="0,8"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource Border.SidePanel.SkillInfoSeparator}">
+                                </Border>
+                                <TextBlock d:Text="快速五连击，发动五次牛逼的攻击"
+                                           FontSize="16"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding Description}" />
+                            </StackPanel>
+                            <Grid>
+                                <Image d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517204885977.png" Stretch="Uniform" Source="{Binding PreviewUrl}" />
+                                <Button Width="50"
+                                        Height="60"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ShowVideoPanelCommand}"
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Background>
+                                        <ImageBrush Stretch="UniformToFill" ImageSource="pack://application:,,,/HonkaiCharacterBrowser;component/Assets/video-play.png" />
+                                    </Button.Background>
+                                </Button>
+                            </Grid>
+                        </DockPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- 隐藏右边栏按钮 -->
+                <Button Grid.Column="1"
+                        Width="80"
+                        Margin="1,20,20,1"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding HideSidePanelCommand}"
+                        Style="{StaticResource Button.Normal}"
+                        Content="Hide" />
+            </Grid>
+        </Border>
+    </Border>
+</UserControl>
