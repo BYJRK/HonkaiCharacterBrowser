@@ -143,7 +143,7 @@
                                                     <Border Height="3"
                                                             Margin="20,0"
                                                             BorderThickness="2"
-                                                            Background="{StaticResource Border.GroupHeader.Line}">
+                                                            BorderBrush="{StaticResource Border.GroupHeader.Line}">
                                                     </Border>
                                                 </DockPanel>
                                                 <ContentPresenter />
