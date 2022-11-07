@@ -10,6 +10,7 @@
 
     <SolidColorBrush x:Key="Border.ValkyrieIcon.Normal" Color="White" />
     <SolidColorBrush x:Key="Border.ValkyrieIcon.MouseOver" Color="#fedf4c" />
+    <SolidColorBrush x:Key="Border.ValkyrieIcon.Selected" Color="#3ed1f8" />
 
     <LinearGradientBrush x:Key="Border.GroupHeader.Line" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Color="#0FFF" />

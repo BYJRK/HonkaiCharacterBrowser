@@ -85,6 +85,7 @@
                     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
                     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
                     <Setter Property="ItemsSource" Value="{Binding Source={StaticResource valkyries}}" />
+                    <Setter Property="SelectedItem" Value="{Binding SelectedItem, Mode=OneWayToSource}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsGroupView}" Value="False">
                             <Setter Property="ItemsSource" Value="{Binding Valkyries}" />
@@ -92,11 +93,11 @@
                     </Style.Triggers>
                 </Style>
             </ListBox.Style>
-            <i:Interaction.Triggers>
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=SelectedItem}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -125,14 +126,18 @@
                         </Image>
                     </Grid>
                     <DataTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger Property="ListBoxItem.IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" Value="{StaticResource Border.ValkyrieIcon.MouseOver}" />
+                        </Trigger>
+                        <Trigger Property="ListBoxItem.IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource Border.ValkyrieIcon.Selected}" />
                         </Trigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
+                    <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">

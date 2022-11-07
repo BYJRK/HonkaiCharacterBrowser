@@ -18,6 +18,13 @@ public class MainWindowViewModel : ObservableObject
     [OnChangedMethod(nameof(ShowSidePanel))]
     public ValkyrieInfo SelectedValkyrie { get; private set; }
 
+    public Valkyrie SelectedItem { get; set; }
+
+    void OnSelectedItemChanged()
+    {
+        SelectionChanged(SelectedItem);
+    }
+
     public bool IsSidePanelVisible { get; set; }
 
     private JArray valkyrieData;
@@ -40,7 +47,6 @@ public class MainWindowViewModel : ObservableObject
 
         ShowVideoPanelCommand = new(() => IsVideoPanelVisible = true);
         HideVideoPanelCommand = new(() => IsVideoPanelVisible = false);
-
     }
 
     #region Relay Commands
