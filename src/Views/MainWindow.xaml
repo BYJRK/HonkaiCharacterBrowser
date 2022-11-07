@@ -56,7 +56,10 @@
                     </Border>
                 </ControlTemplate>
             </Button.Template>
-            <Image Margin="0,-20,0,0" d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517180016482.png" Source="{Binding SelectedValkyrie.ProtraitUrl}" />
+            <Image Margin="0,-20,0,0"
+                   d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517180016482.png"
+                   RenderOptions.BitmapScalingMode="Fant"
+                   Source="{Binding SidePanelViewModel.SelectedValkyrie.ProtraitUrl}" />
         </Button>
 
         <!-- 背景图片 -->
@@ -65,8 +68,9 @@
         <!-- 右侧信息栏 -->
         <local:SidePanel Grid.Column="1"
                          Width="400"
+                         Margin="10"
                          d:Visibility="Visible"
-                         DataContext="{Binding}"
+                         DataContext="{Binding SidePanelViewModel}"
                          Visibility="{Binding IsSidePanelVisible, Converter={vc:BoolToVisibilityConverter}}" />
 
         <!-- 角色列表 -->
@@ -85,7 +89,6 @@
                     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
                     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
                     <Setter Property="ItemsSource" Value="{Binding Source={StaticResource valkyries}}" />
-                    <Setter Property="SelectedItem" Value="{Binding SelectedItem, Mode=OneWayToSource}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsGroupView}" Value="False">
                             <Setter Property="ItemsSource" Value="{Binding Valkyries}" />
@@ -93,11 +96,11 @@
                     </Style.Triggers>
                 </Style>
             </ListBox.Style>
-            <!--<i:Interaction.Triggers>
+            <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=SelectedItem}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>-->
+            </i:Interaction.Triggers>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -129,15 +132,14 @@
                         <Trigger Property="ListBoxItem.IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" Value="{StaticResource Border.ValkyrieIcon.MouseOver}" />
                         </Trigger>
-                        <Trigger Property="ListBoxItem.IsSelected" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Border.ValkyrieIcon.Selected}" />
-                        </Trigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource Border.ValkyrieIcon.MouseOver}" />
+                        </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
@@ -167,12 +169,12 @@
                         Panel.ZIndex="10"
                         Command="{Binding HideVideoPanelCommand}"
                         Style="{StaticResource Button.CloseVideo}" />
-                <MediaElement Volume="0.75">
+                <MediaElement Volume="0.75" LoadedBehavior="Play">
                     <MediaElement.Style>
                         <Style TargetType="MediaElement">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsVideoPanelVisible}" Value="True">
-                                    <Setter Property="Source" Value="{Binding ElementName=skills, Path=SelectedItem.VideoUrl}" />
+                                    <Setter Property="Source" Value="{Binding SidePanelViewModel.SelectedSkill.VideoUrl}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using HonkaiCharacterBrowser.Helpers;
+using HonkaiCharacterBrowser.Messages;
 using HonkaiCharacterBrowser.Models;
 using Newtonsoft.Json.Linq;
 using PropertyChanged;
@@ -13,19 +15,12 @@ namespace HonkaiCharacterBrowser.ViewModels;
 
 public class MainWindowViewModel : ObservableObject
 {
+    [DoNotNotify]
+    public SidePanelViewModel SidePanelViewModel { get; } = new();
+
     public ObservableCollection<Valkyrie> Valkyries { get; private set; }
 
-    [OnChangedMethod(nameof(ShowSidePanel))]
-    public ValkyrieInfo SelectedValkyrie { get; private set; }
-
     public Valkyrie SelectedItem { get; set; }
-
-    void OnSelectedItemChanged()
-    {
-        SelectionChanged(SelectedItem);
-    }
-
-    public bool IsSidePanelVisible { get; set; }
 
     private JArray valkyrieData;
 
@@ -38,7 +33,7 @@ public class MainWindowViewModel : ObservableObject
     public MainWindowViewModel()
     {
         LoadedCommand = new(LoadAllAsync);
-        HideSidePanelCommand = new(() => IsSidePanelVisible = false);
+        HideSidePanelCommand = new(() => SidePanelViewModel.IsSidePanelVisible = false);
         SelectionChangedCommand = new(SelectionChanged);
         ToggleListBoxViewCommand = new(() => IsGroupView = !IsGroupView);
 
@@ -47,6 +42,15 @@ public class MainWindowViewModel : ObservableObject
 
         ShowVideoPanelCommand = new(() => IsVideoPanelVisible = true);
         HideVideoPanelCommand = new(() => IsVideoPanelVisible = false);
+
+        WeakReferenceMessenger.Default.Register<ShowProtraitMessage>(this, (_, m) =>
+        {
+            ShowProtraitCommand.Execute(null);
+        });
+        WeakReferenceMessenger.Default.Register<PlayVideoMessage>(this, (_, m) =>
+        {
+            ShowVideoPanelCommand.Execute(null);
+        });
     }
 
     #region Relay Commands
@@ -108,7 +112,7 @@ public class MainWindowViewModel : ObservableObject
             ));
         }
 
-        SelectedValkyrie = new ValkyrieInfo(
+        SidePanelViewModel.SelectedValkyrie = new ValkyrieInfo(
             v.ChineseName,
             armor,
             birthday,
@@ -116,7 +120,7 @@ public class MainWindowViewModel : ObservableObject
             info.First(v => v["arrtName"].ToString() == "角色大立绘图")["value"][0]["url"].ToString(),
             skills.ToArray()
         );
-    }
 
-    void ShowSidePanel() => IsSidePanelVisible = true;
+        SidePanelViewModel.ShowSidePanelCommand.Execute(null);
+    }
 }

@@ -9,7 +9,7 @@
              xmlns:vc="clr-namespace:HonkaiCharacterBrowser.Converters"
              xmlns:model="clr-namespace:HonkaiCharacterBrowser.Models"
              xmlns:be="clr-namespace:HonkaiCharacterBrowser.Behaviors"
-             d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
+             d:DataContext="{d:DesignInstance vm:SidePanelViewModel}"
              d:DesignHeight="800"
              d:DesignWidth="400"
              TextElement.Foreground="White"
@@ -78,6 +78,7 @@
                                  Background="Transparent"
                                  BorderThickness="0"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 SelectedItem="{Binding SelectedSkill}"
                                  ItemsSource="{Binding SelectedValkyrie.Skills, NotifyOnTargetUpdated=True}">
                             <i:Interaction.Behaviors>
                                 <be:AutoSelectFirstKListBoxItemBehavior />
@@ -134,7 +135,7 @@
                                 <Image d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517204885977.png" Stretch="Uniform" Source="{Binding PreviewUrl}" />
                                 <Button Width="50"
                                         Height="60"
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowVideoPanelCommand}"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.PlayVideoCommand}"
                                         Cursor="Hand">
                                     <Button.Style>
                                         <Style TargetType="Button">
