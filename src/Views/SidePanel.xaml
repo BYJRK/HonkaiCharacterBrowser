@@ -8,6 +8,7 @@
              xmlns:vm="clr-namespace:HonkaiCharacterBrowser.ViewModels"
              xmlns:vc="clr-namespace:HonkaiCharacterBrowser.Converters"
              xmlns:model="clr-namespace:HonkaiCharacterBrowser.Models"
+             xmlns:be="clr-namespace:HonkaiCharacterBrowser.Behaviors"
              d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
              d:DesignHeight="800"
              d:DesignWidth="400"
@@ -77,7 +78,10 @@
                                  Background="Transparent"
                                  BorderThickness="0"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 ItemsSource="{Binding SelectedValkyrie.Skills}">
+                                 ItemsSource="{Binding SelectedValkyrie.Skills, NotifyOnTargetUpdated=True}">
+                            <i:Interaction.Behaviors>
+                                <be:AutoSelectFirstKListBoxItemBehavior />
+                            </i:Interaction.Behaviors>
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Rows="1" />
@@ -130,15 +134,26 @@
                                 <Image d:Source="https://uploadstatic.mihoyo.com/contentweb/20191105/2019110517204885977.png" Stretch="Uniform" Source="{Binding PreviewUrl}" />
                                 <Button Width="50"
                                         Height="60"
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ShowVideoPanelCommand}"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ShowVideoPanelCommand}"
                                         Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}">
-                                                <ContentPresenter />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Button.Template>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}">
+                                                            <ContentPresenter />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=skills, Path=SelectedItem}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
                                     <Button.Background>
                                         <ImageBrush Stretch="UniformToFill" ImageSource="pack://application:,,,/HonkaiCharacterBrowser;component/Assets/video-play.png" />
                                     </Button.Background>
